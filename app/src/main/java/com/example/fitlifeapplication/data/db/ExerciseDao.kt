@@ -1,0 +1,28 @@
+package com.example.fitlifeapplication.data.db
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import com.example.fitlifeapplication.data.model.Exercise
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ExerciseDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(exercise: Exercise): Long
+
+    @Update
+    suspend fun update(exercise: Exercise)
+
+    @Delete
+    suspend fun delete(exercise: Exercise)
+
+    @Query("SELECT * FROM exercises ORDER BY name ASC")
+    fun getAllExercises(): Flow<List<Exercise>>
+
+    @Query("SELECT * FROM exercises WHERE exerciseId = :exerciseId")
+    fun getExerciseById(exerciseId: Long): Flow<Exercise?>
+}
